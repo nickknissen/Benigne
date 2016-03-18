@@ -8,7 +8,7 @@ SITE_NAME ?= 'site-$(RANDOM)'
 WP_ADMIN_PASSWORD ?= '$(shell openssl rand -base64 8)'
 WP_ADMIN_USER ?= $(shell git config --get --global user.email)
 
-RSYNC_EXCLUDE ?= --exclude node_modules/ --exclude wp-config.php --exclude .DS_Store --exclude .git/
+RSYNC_EXCLUDE ?= --exclude node_modules/ --exclude wp-config.php --exclude .DS_Store --exclude .git/ --exclude *.swp
 
 default:
 	echo $(RANDOM)
