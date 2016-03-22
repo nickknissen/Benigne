@@ -8,12 +8,12 @@ server:
 vagrant_local:
     install: '1'
     vm:  
-        base_box: trusty64, 
-        hostname: {{SITE_NAME}}, 
-        ip: {{VAGRANT_IP}}, 
-        memory: '1024', 
-        sharedfolder: sites, 
-        useVagrantCloud: '1', 
+        base_box: trusty64
+        hostname: {{SITE_NAME}}
+        ip: {{VAGRANT_IP}}
+        memory: 1024
+        sharedfolder: sites
+        useVagrantCloud: '1' 
         syncType: nfs 
 
 apache:
