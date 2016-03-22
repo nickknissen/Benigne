@@ -24,7 +24,7 @@ apache:
 mysql:
     install: '1'
     root_password: {{VAGRANT_MYSQL_ROOT_PASSWORD}}
-    database: {{VAGRANT_MYSQL_USER}}
+    database: {{VAGRANT_MYSQL_DB}}
     user: {{VAGRANT_MYSQL_USER}}
     password: {{VAGRANT_MYSQL_PASSWORD}}
     dump: ''
