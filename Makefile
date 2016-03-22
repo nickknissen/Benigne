@@ -11,12 +11,8 @@ WP_ADMIN_USER ?= $(shell git config --get --global user.email)
 RSYNC_EXCLUDE ?= --exclude node_modules/ --exclude wp-config.php --exclude .DS_Store --exclude .git/ --exclude *.swp
 
 default:
-	echo $(RANDOM)
-	grep -rl '{{VAGRANT_IP}}' ./ --exclude="Makefile" | xargs sed -i 's/{{VAGRANT_IP}}/$(VAGRANT_IP)/g'
-	grep -rl '{{SITE_NAME}}' ./ --exclude="Makefile" | xargs sed -i 's/{{SITE_NAME}}/$(SITE_NAME)/g'
-	grep -rl '{{VAGRANT_MYSQL_DB}}' ./  --exclude="Makefile"| xargs sed -i 's/{{VAGRANT_MYSQL_DB}}/$(VAGRANT_MYSQL_DB)/g'
-	grep -rl '{{VAGRANT_MYSQL_USER}}' ./  --exclude="Makefile"| xargs sed -i 's/{{VAGRANT_MYSQL_USER}}/$(VAGRANT_MYSQL_USER)/g'
-	grep -rl '{{VAGRANT_MYSQL_PASSWORD}}' ./  --exclude="Makefile"| xargs sed -i 's/{{VAGRANT_MYSQL_PASSWORD}}/$(VAGRANT_MYSQL_PASSWORD)/g'
+	$(MAKE) replace_variables
+
 	git clone -b $(WORDPRESS_BRANCH) --single-branch --depth 1 git@github.com:WordPress/WordPress.git site
 	rm -rf ./site/.git
 	wget -O ./site/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -33,6 +29,14 @@ default:
 clean:
 	git add .
 	git reset --hard
+
+replace_variables:
+	grep -rl '{{VAGRANT_IP}}' ./ --exclude="Makefile" | xargs sed -i 's/{{VAGRANT_IP}}/$(VAGRANT_IP)/g'
+	grep -rl '{{SITE_NAME}}' ./ --exclude="Makefile" | xargs sed -i 's/{{SITE_NAME}}/$(SITE_NAME)/g'
+	grep -rl '{{VAGRANT_MYSQL_DB}}' ./  --exclude="Makefile"| xargs sed -i 's/{{VAGRANT_MYSQL_DB}}/$(VAGRANT_MYSQL_DB)/g'
+	grep -rl '{{VAGRANT_MYSQL_USER}}' ./  --exclude="Makefile"| xargs sed -i 's/{{VAGRANT_MYSQL_USER}}/$(VAGRANT_MYSQL_USER)/g'
+	grep -rl '{{VAGRANT_MYSQL_PASSWORD}}' ./  --exclude="Makefile"| xargs sed -i 's/{{VAGRANT_MYSQL_PASSWORD}}/$(VAGRANT_MYSQL_PASSWORD)/g'
+	grep -rl '{{VAGRANT_MYSQL_ROOT_PASSWORD}}' ./  --exclude="Makefile"| xargs sed -i 's/{{VAGRANT_MYSQL_ROOT_PASSWORD}}/$(VAGRANT_MYSQL_ROOT_PASSWORD)/g'
 
 wp_generate_config:
 	wget https://api.wordpress.org/secret-key/1.1/salt/ -q -O keys.php
