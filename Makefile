@@ -68,8 +68,8 @@ configure_wp:
 
 wp_plugins:
 	rm -f site/wp-content/plugins/hello.php
-	#wget -O site/wp-content/plugins/acf-pro.zip 'http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=$(ACF_KEY)'
-	#vagrant ssh -c 'php /vagrant/wp-cli.phar plugin install /vagrant/wp-content/plugins/acf-pro.zip --path=/vagrant/ --activate'
+	wget -O site/wp-content/plugins/acf-pro.zip 'http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=$(ACF_KEY)'
+	vagrant ssh -c 'php /vagrant/wp-cli.phar plugin install /vagrant/wp-content/plugins/acf-pro.zip --path=/vagrant/ --activate'
 	vagrant ssh -c 'php /vagrant/wp-cli.phar plugin install acf-field-date-time-picker --path=/vagrant/ --activate'
 
 configure_theme_git:
