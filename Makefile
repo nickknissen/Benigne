@@ -33,10 +33,10 @@ existing:
 	rsync $(RSYNC_EXCLUDE) -avz -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH) site/
 
 	wget -O ./site/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-	ifdef $(THEME_GIT_REMOTE)
-		rm -rf 'site/wp-content/themes/$(SITE_NAME)'
-		git clone $(THEME_GIT_REMOTE) 'site/wp-content/themes/$(SITE_NAME)'
-	endif
+ifdef $(THEME_GIT_REMOTE)
+	rm -rf 'site/wp-content/themes/$(SITE_NAME)'
+	git clone $(THEME_GIT_REMOTE) 'site/wp-content/themes/$(SITE_NAME)'
+endif
 	vagrant up
 
 clean:
