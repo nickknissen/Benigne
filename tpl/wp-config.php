@@ -12,8 +12,8 @@ $table_prefix = 'wp_';
 {{KEYS}}
 
 define('WP_DEBUG', true);
-define('WP_HOME', '{{VAGRANT_IP}}');
-define('WP_SITEURL', '{{VAGRANT_IP}}');
+define('WP_HOME', 'http://{{VAGRANT_IP}}');
+define('WP_SITEURL', 'http://{{VAGRANT_IP}}');
 
 if (!defined('ABSPATH'))
 	define('ABSPATH', dirname(__FILE__) . '/');
