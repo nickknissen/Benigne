@@ -104,4 +104,4 @@ compare_remote_theme:
 	rsync $(RSYNC_EXCLUDE) -n -avzrc --delete site/wp-content/themes/$(SITE_NAME)/ -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH)/wp-content/themes/$(SITE_NAME)/
 
 gulp_prod:
-	NODE_PATH=site/wp-content/themes/$(SITE_NAME)/node_modules/ gulp --gulpfile=site/wp-content/themes/$(SITE_NAME)/gulpfile.js
+	NODE_PATH=site/wp-content/themes/$(SITE_NAME)/node_modules/ gulp --gulpfile=site/wp-content/themes/$(SITE_NAME)/gulpfile.js --production
