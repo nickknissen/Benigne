@@ -27,7 +27,7 @@ mysql:
     database: {{VAGRANT_MYSQL_DB}}
     user: {{VAGRANT_MYSQL_USER}}
     password: {{VAGRANT_MYSQL_PASSWORD}}
-    dump: ''
+    dump: '{{VAGRANT_MYSQL_DUMP}}'
 
 php:
     install: '1'
