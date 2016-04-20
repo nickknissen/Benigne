@@ -31,6 +31,7 @@ default:
 
 existing:
 	$(MAKE) replace_variables
+	ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST) "mysqldump -u $(REMOTE_MYSQL_USER) -p$(REMOTE_MYSQL_PASSWORD) $(REMOTE_MYSQL_DB) > $(REMOTE_WP_PATH)$(REMOTE_MYSQL_DUMP)"
 	rsync $(RSYNC_EXCLUDE) -avz -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH) site/
 
 	wget -O ./site/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
