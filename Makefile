@@ -8,9 +8,10 @@ SITE_NAME ?= 'site-$(RANDOM)'
 WP_ADMIN_PASSWORD ?= '$(shell openssl rand -base64 8)'
 WP_ADMIN_USER ?= $(shell git config --get --global user.email)
 
-RSYNC_EXCLUDE ?= --exclude node_modules/ --exclude wp-config.php --exclude .DS_Store --exclude .git/ --exclude *.swp --exclude wp-snapshots/ --exclude test/ --exclude stats/ --exclude tmp/ --exclude cache/
+RSYNC_EXCLUDE ?= --exclude node_modules/  --exclude .DS_Store --exclude .git/ --exclude *.swp --exclude wp-snapshots/ --exclude test/ --exclude stats/ --exclude tmp/ --exclude cache/
 
 GREP ?= grep -rl --exclude-dir=site --exclude=Makefile
+NOW ?= $(shell date +"%m-%d-%Y")
 
 default:
 	$(MAKE) replace_variables
@@ -95,13 +96,17 @@ vars:
 	@echo "SSH user: $(REMOTE_SSH_USER)"
 
 deploy_site:
-	rsync $(RSYNC_EXCLUDE) -avz site/ -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH)
+	rsync $(RSYNC_EXCLUDE) --exclude wp-config.php -avz site/ -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH)
 
 deploy_theme: gulp_prod
-	rsync $(RSYNC_EXCLUDE) -avz site/wp-content/themes/$(SITE_NAME)/ -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH)/wp-content/themes/$(SITE_NAME)/
+	rsync $(RSYNC_EXCLUDE) -avz site/wp-content/themes/$(SITE_NAME)/ -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH)wp-content/themes/$(SITE_NAME)/
 
 compare_remote_theme:
-	rsync $(RSYNC_EXCLUDE) -n -avzrc --delete site/wp-content/themes/$(SITE_NAME)/ -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH)/wp-content/themes/$(SITE_NAME)/
+	rsync $(RSYNC_EXCLUDE) -n -avzrc --delete site/wp-content/themes/$(SITE_NAME)/ -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH)wp-content/themes/$(SITE_NAME)/
 
 gulp_prod:
 	NODE_PATH=site/wp-content/themes/$(SITE_NAME)/node_modules/ gulp --gulpfile=site/wp-content/themes/$(SITE_NAME)/gulpfile.js --production
+
+backup_site:
+	ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST) "mysqldump -u $(REMOTE_MYSQL_USER) -p$(REMOTE_MYSQL_PASSWORD) $(REMOTE_MYSQL_DB) > $(REMOTE_WP_PATH)$(REMOTE_MYSQL_DUMP)"
+	rsync $(RSYNC_EXCLUDE) -avz -e ssh $(REMOTE_SSH_USER)@$(REMOTE_SSH_HOST):$(REMOTE_WP_PATH) "backup_$(NOW)"
